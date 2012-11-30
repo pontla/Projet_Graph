@@ -5,41 +5,37 @@ import java.util.*;
 public class Station 
 {
 
-	public String ville;
-	public ArrayList<String> gare;
+	public String ville,gare;
 	public ArrayList<Trajet> trajets;
-	public int ptransfert;
+	public Station jumelle; //on admet qu'il ni a pas plus de deux gare par ville
+	public int dureeNavette;
 
-	public Station()
+	public Station(String v1 ,String v2)
 	{
-
-	}
-
-	public Station(String v1 , String[] g,String p)
-	{
-		ptransfert=0;
 		ville= v1;
-		double j=0;
-				for(int i=0;i<g.length;i++){
-					gare.add(g[i]);
-				}
-		for(int i=p.length();i>0;i--){
-			ptransfert += p.charAt(i-1)*Math.pow(10, j);
-			j++;
-		}
-
+		trajets = new ArrayList<Trajet>();
+		trajets.add(new Trajet(this,this,"",""));
+		gare = v2;
+		jumelle=null;
 	}
 
-	public void addTrajet(Trajet traj){
+	public void addTrajet(Trajet traj)
+	{
 		trajets.add(traj);
 	}
-	public boolean equals(Station s){
+	
+	public void addJumelle(Station g,int duree)
+	{
+		jumelle = g ;
+		dureeNavette = duree;
+		g.addJumelle(this, duree); //Reciprocite de la jumellitude
+	}
+	@Override
+	public boolean equals(Object obj)
+	{
+		Station s =(Station)(obj);
 		boolean rep=false;
-
-		if (s.ville == this.ville)
-		{
-			rep=true;
-		}
+		if (s.ville==ville && s.gare==gare)rep=true;
 		return rep;
 	}
 }
