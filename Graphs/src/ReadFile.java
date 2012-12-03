@@ -55,7 +55,6 @@ public class ReadFile {
 		ArrayList<Trajet> fdr=new ArrayList<Trajet>();
 		ArrayList<Trajet> mestrajets = new ArrayList<Trajet>();
 		String garedep="",villedep="",hdep="";
-
 		//lecture du fichier texte	
 		try{
 			InputStream ips=new FileInputStream("FeuillesRoutes.txt"); 
@@ -81,6 +80,7 @@ public class ReadFile {
 						if(villedep!=null)
 						{
 							x=new Station(villedep,garedep);
+							System.out.println(mesStations.indexOf(x));
 							if(!mesStations.contains(x))
 							{
 								mesStations.add(x);

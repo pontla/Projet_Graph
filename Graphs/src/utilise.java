@@ -10,10 +10,11 @@ public class utilise {
 		// TODO Auto-generated method stub
 		ArrayList<Station> mesStations =ReadFile.fg();
 		mesStations.trimToSize();
+	
 		Station depart=mesStations.get(1);
 		Station arrive=mesStations.get(6);
 		System.out.println(depart.ville+"a "+arrive.ville);
-		ReadFile.algoritmedikjstra(depart, arrive,"08:10", 'g', mesStations);
+		ReadFile.algoritmedikjstra(depart, arrive,"07:00", 'g', mesStations);
 	}
 
 }

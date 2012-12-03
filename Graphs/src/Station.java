@@ -30,11 +30,11 @@ public class Station
 	    jumelle.jumelle=this; //Reciprocite de la jumellitude
 	}
 	
-	@Override
-	public boolean equals(Object obj)
+	
+	@Override public boolean equals(Object obj)
 	{
 		Station s =(Station)obj;
-		if (s.ville==ville && s.gare==gare)return true;
+		if (s.ville.equals(this.ville) || s.gare.equals(this.gare))return true;
 		else return false;
 	}
 }
