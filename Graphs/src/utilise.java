@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 
 public class utilise {
 
@@ -6,8 +8,12 @@ public class utilise {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		ReadFile.fg();
-
+		ArrayList<Station> mesStations =ReadFile.fg();
+		mesStations.trimToSize();
+		Station depart=mesStations.get(1);
+		Station arrive=mesStations.get(6);
+		System.out.println(depart.ville+"a "+arrive.ville);
+		ReadFile.algoritmedikjstra(depart, arrive,"08:10", 'g', mesStations);
 	}
 
 }

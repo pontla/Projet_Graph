@@ -14,7 +14,6 @@ public class Station
 	{
 		ville= v1;
 		trajets = new ArrayList<Trajet>();
-		trajets.add(new Trajet(this,this,"",""));
 		gare = v2;
 		jumelle=null;
 	}

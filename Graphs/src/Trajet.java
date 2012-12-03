@@ -17,10 +17,10 @@ public class Trajet {
 	// Calcul de la durée du trajet en minutes
 	public int duree()
 	{
-		int hd = (int)(hDep.charAt(0)+hDep.charAt(1));
-		int md = (int)(hDep.charAt(3)+hDep.charAt(4));
-		int ha = (int)(hArr.charAt(0)+hArr.charAt(1));
-		int ma = (int)(hArr.charAt(3)+hArr.charAt(4));
+		int hd = (int)((hDep.charAt(0)) -48)*10 +(int)(hDep.charAt(1)) -48;
+		int md = (int)((hDep.charAt(3)) -48)*10 +(int)(hDep.charAt(4)) -48;
+		int ha = (int)((hArr.charAt(0)) -48)*10 +(int)(hArr.charAt(1)) -48;
+		int ma = (int)((hArr.charAt(3)) -48)*10 +(int)(hArr.charAt(4)) -48;
 		int hduree= ha-hd;
 		int mduree= ma-md;
 		int duree;
