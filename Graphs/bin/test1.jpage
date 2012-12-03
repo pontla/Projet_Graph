@@ -1,0 +1,32 @@
+public static void algoritmedikjstra(String depart,String arrive,String heuredep, char critere)
+	{
+		int[][] etapes; 
+		String[] precedents;
+		Station tabs[]= new Station[5];
+		Station arrive;
+		int j=0;
+		while(depart!=tabs[j].ville)j++;
+		int i=0;
+		for (int k=0;k<.length;k++){
+			i=0;
+			while(depart.precedente.get(k)!=tabs[i])i++;
+			int poids[i]=Math.min(poids[j]+depart.precedente.get(k).duree(depart);
+
+		}
+		i=1;
+		int l;
+		while(i<poids.length){
+			int p = Integer.MAX_VALUE;
+			if(p>poids[i]){
+				p=poids[i];
+				l=i;
+				i++;
+			}
+			if(tabs[l]!=arrive){
+				ReadFile.algoritmedikjstra(tabs[l],poids[i]);
+			}
+			else{ System.out.println("poids minimal = "+ poids[i];} 
+
+		}
+
+	}

@@ -8,32 +8,32 @@ public class ReadFile {
 	public static void fg(){
 		int i,j,k,p;
 		String ligne,prix,nomgare2,nomgare,ville="";
-		
+
 		ArrayList<Station> mesStations = new ArrayList<Station>();
 		Station stati;
 
 		try{
-			InputStream ips=new FileInputStream("Gare.txt"); 
+			InputStream ips=new FileInputStream("Gares.txt"); 
 			InputStreamReader ipsr=new InputStreamReader(ips);
 			br = new BufferedReader(ipsr);
-			
+
 			while ((ligne=br.readLine())!=null){
-				//System.out.println(ligne);
+				System.out.println(ligne);
 				if(ligne.contains("Ville :"))
 				{
-					ville = ligne.substring(6);
+					ville = ligne.substring(8);
 				}
 				else
 				{
-					nomgare = ligne.substring(0, 1);
-					nomgare2 = ligne.substring(3,4);
+					nomgare = ligne.substring(0,2);
+					nomgare2 = ligne.substring(3,5);
 					prix = ligne.substring(6);
 					stati= new Station(ville,nomgare);
 					mesStations.add(stati);
 					i=mesStations.size()-1;
 					stati= new Station(ville,nomgare2);
 					mesStations.add(stati);
-					
+
 					//Conversion du prix horaire en entier
 					p=0;
 					k=0;	
@@ -44,32 +44,19 @@ public class ReadFile {
 					}
 					stati.addJumelle(mesStations.get(i),p);
 				}
-
-				/*if(!chaine.contains("prixh") && !chaine.contains("Feuille :")){
-					String ville = chaine.substring(12);
-					i = ville.indexOf(" ");
-					a = new Station(chaine.substring(0,5),chaine.substring(6,11),ville.substring(0, i),ville.substring(i+1),a);
-
-				 */
 			}
 		}
 		catch (Exception e){
 			System.out.println(e.toString());
-		//}
-	}
-
-
-
-
-
-//ensemble d'aretes
-	//public static void fdr(){
-	//	int i,j,p ;
-	//	String ligne;
-	//	String prix;
+			//}
+		}
+		
+		//fdr
+		Station x;
 		ArrayList<Trajet> fdr=new ArrayList<Trajet>();
 		ArrayList<Trajet> mestrajets = new ArrayList<Trajet>();
 		String garedep="",villedep="",hdep="";
+		
 		//lecture du fichier texte	
 		try{
 			InputStream ips=new FileInputStream("FeuillesRoutes.txt"); 
@@ -77,57 +64,69 @@ public class ReadFile {
 			BufferedReader br=new BufferedReader(ipsr);
 
 			while ((ligne=br.readLine())!=null){
-				//System.out.println(ligne);
+				System.out.println(ligne);
+				
+				//Remise a null des variables de depart lors d'une nouvelle fdr
 				if(ligne.contains("Feuille :"))
 				{
 					villedep=null;
 					garedep=null;
 					hdep=null;
 				}
-				
+
 				//lecture d'une ligne d'information sur le train lors d'une entree en gare
-				if(!ligne.contains("prixh") && !ligne.contains("Feuille :"))
-				{
-					
-					//On enregistre le trajet si on lit la deuxieme gare de la FDR
-					if(garedep!=null)
+				else 
+					if(!ligne.contains("prixh"))
 					{
-						Station temp=mesStations.get((mesStations.indexOf(new Station(villedep,garedep))));
-						Station temp2=mesStations.get((mesStations.indexOf(new Station(ligne.substring(12,13),ligne.substring(14)))));
-						//temp.addTrajet(new Trajet(temp,temp2,hdep,ligne.substring(6,11)));
-						fdr.add(new Trajet(temp,temp2,hdep,ligne.substring(6,11)));
+
+						//On enregistre le trajet si on lit la deuxieme gare de la FDR
+						if(villedep!=null)
+						{
+							x=new Station(villedep,garedep);
+							if(!mesStations.contains(x))
+							{
+								mesStations.add(x);
+							}
+							Station temp=mesStations.get((mesStations.indexOf(x)));
+							x=new Station(ligne.substring(12,13),ligne.substring(14));
+							if(!mesStations.contains(x))
+							{
+								mesStations.add(x);
+							}
+							Station temp2=mesStations.get((mesStations.indexOf(x)));
+							fdr.add(new Trajet(temp,temp2,hdep,ligne.substring(6,11)));
+						}
+						
+						//Memorisation du depart du prochain trajet
+						garedep=ligne.substring(14);
+						villedep=ligne.substring(12,13);
+						hdep=ligne.substring(6,11);
 					}
-					garedep=ligne.substring(14);
-					villedep=ligne.substring(12,13);
-					hdep=ligne.substring(6,11);
-				}
-				else if(ligne.contains("prixh"))
-				{
-					
-					//Conversion du prix horaire en entier
-					p=0;
-					j=0;
-					prix=ligne.substring(8);		
-					for (i=prix.length()-1;i>=0;i--)
-					{
-						p+=(int)(prix.charAt(i)) *Math.pow(10,j);
-						j++;
-					}
-					
-					//Calcul du prix de chaque Trajet
-					for(Trajet t : fdr)
-					{
-						t.setPrix(p);
-						t.gareDep.addTrajet(t);
-					}
-					
-					//on ajoute les trajet de cette FDR a l'ensemble des trajets.
-					mestrajets.addAll(fdr);
-					fdr=new ArrayList<Trajet>();
-				}
-				else {
-					System.out.println("ERREUR");
-				}
+					else
+						{
+							//Conversion du prix horaire en entier
+							p=0;
+							j=0;
+							prix=ligne.substring(8);
+							for (i=prix.length()-1;i>=0;i--)
+							{
+								int plo=(int)Math.pow(10,j);
+								int plu=(int)prix.charAt(i)-48;
+								p+= plo * plu;
+								j++;
+							}
+							
+						
+							//Calcul du prix de chaque Trajet , et liaison des arete avec les points
+							for(Trajet t : fdr)
+							{	
+								t.setPrix(p);
+								t.gareDep.addTrajet(t);
+							} 
+							//on ajoute les trajet de cette FDR a l'ensemble des trajets.
+							mestrajets.addAll(fdr);
+							fdr=new ArrayList<Trajet>();
+						}
 			}		
 			br.close(); 
 		}		
@@ -135,8 +134,7 @@ public class ReadFile {
 			System.out.println(e.toString());
 		}
 	}
-
-	/*public static void algoritmedikjstra(String depart,String arrive,String heure)
+	public static void algoritmedikjstra(String depart,String arrive,String heure)
 	{
 		int[][] etapes; 
 		String[] precedents;

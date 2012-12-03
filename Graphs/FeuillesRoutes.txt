@@ -29,3 +29,7 @@ Feuille :
 13:10 13:15 F F2
 15:15 25:00 D D2
 prixh : 60
+Feuille :
+25:00 08:45 C C2
+12:00 25:00 G G2
+prixh : 120 

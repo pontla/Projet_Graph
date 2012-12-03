@@ -17,11 +17,10 @@ public class Trajet {
 	// Calcul de la durée du trajet en minutes
 	public int duree()
 	{
-		int hd = (int)(hDep.charAt(1)+hDep.charAt(2));
-		int md = (int)(hDep.charAt(4)+hDep.charAt(5));
-		int ha = (int)(hArr.charAt(1)+hArr.charAt(2));
-		int ma = (int)(hArr.charAt(4)+hArr.charAt(5));
-		
+		int hd = (int)(hDep.charAt(0)+hDep.charAt(1));
+		int md = (int)(hDep.charAt(3)+hDep.charAt(4));
+		int ha = (int)(hArr.charAt(0)+hArr.charAt(1));
+		int ma = (int)(hArr.charAt(3)+hArr.charAt(4));
 		int hduree= ha-hd;
 		int mduree= ma-md;
 		int duree;
@@ -45,6 +44,7 @@ public class Trajet {
 	//Modificateur du prix :calculé en fonction de de la durée du trajet et du prix-horaire de la ligne
 	public void setPrix(int p)
 	{
-		prix = this.duree()*p/60; //on divise par 60 car la durée est donné en minute et p est le prix horaire
+		
+		this.prix = (float)this.duree()*p/60; //on divise par 60 car la durée est donné en minute et p est le prix horaire
 	}
 }

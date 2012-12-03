@@ -28,14 +28,14 @@ public class Station
 	{
 		jumelle = g ;
 		dureeNavette = duree;
-		g.addJumelle(this, duree); //Reciprocite de la jumellitude
+	    jumelle.jumelle=this; //Reciprocite de la jumellitude
 	}
+	
 	@Override
 	public boolean equals(Object obj)
 	{
-		Station s =(Station)(obj);
-		boolean rep=false;
-		if (s.ville==ville && s.gare==gare)rep=true;
-		return rep;
+		Station s =(Station)obj;
+		if (s.ville==ville && s.gare==gare)return true;
+		else return false;
 	}
 }
