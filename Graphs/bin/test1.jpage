@@ -1,32 +1,89 @@
-public static void algoritmedikjstra(String depart,String arrive,String heuredep, char critere)
+Syntax error, insert ";" to complete BlockStatementsSyntax error on token "(", ; expectedpublic static void algoritmedikjstra(Station depart,Station arrive,String heuredep, char critere)
 	{
-		int[][] etapes; 
-		String[] precedents;
-		Station tabs[]= new Station[5];
+		Station depart;
 		Station arrive;
-		int j=0;
-		while(depart!=tabs[j].ville)j++;
-		int i=0;
-		for (int k=0;k<.length;k++){
-			i=0;
-			while(depart.precedente.get(k)!=tabs[i])i++;
-			int poids[i]=Math.min(poids[j]+depart.precedente.get(k).duree(depart);
-
-		}
-		i=1;
-		int l;
-		while(i<poids.length){
-			int p = Integer.MAX_VALUE;
-			if(p>poids[i]){
-				p=poids[i];
-				l=i;
-				i++;
+		int hd = (int)(heuredep.charAt(0)+heuredep.charAt(1));
+		int md = (int)(heuredep.charAt(3)+heuredep.charAt(4));
+		
+		int[] poidTrajets = new int[mesStations.length]() ;
+		for(int i : poidTrajets)
+		{i=-1;}
+		
+		Station[] precedences;
+		
+		int i=0 ;
+		while(mesStations[i]!=depart)i++;
+		poids[i]=0;
+		
+		
+		//Algo meilleur Temps d arrivee entre lheure demandee pour le depart et l heure d arrivee en gare
+		System.out.println("initialise");
+		//initialisation
+		for (Trajet traj : depart.trajets)
+		{
+			if ( heuredep < traj.hDep)
+			{
+				int i=0 ;
+				while(mesStations[i]!=traj.gareArr)i++;
+				
+				int ha = (int)(traj.hArr.charAt(0)+traj.hArr.charAt(1));
+				int ma = (int)(traj.hArr.charAt(3)+traj.hArr.charAt(4));
+				
+				if(poidsTrajet==-1 || poidsTrajets[i]> (ha-hd)*60 +ma-md)
+				{
+					poidTrajets[i]=(ha-hd)*60 +ma-md;
+					precedence[i]=depart;
+				}
 			}
-			if(tabs[l]!=arrive){
-				ReadFile.algoritmedikjstra(tabs[l],poids[i]);
-			}
-			else{ System.out.println("poids minimal = "+ poids[i];} 
-
 		}
-
+		System.out.println("recherche distance proche");
+		//Algo
+		//Recherche de la distance la plus proche
+		int k ;
+		for( i=1;i<mesStations.length();i++)
+		{
+			if (min==-1 || min>poidTrajets[i])
+			{
+				k=i;
+			}
+		}
+		Station plusproche= mesStations[k];
+		boolean bool=(plusproche==arrive);		System.out.println("debut algo");
+		while(bool=false)
+		{
+			int hd = (int)(heuredep.charAt(0)+heuredep.charAt(1));
+			int md = (int)(heuredep.charAt(3)+heuredep.charAt(4));
+			
+			int min=poidsTrajets[0];
+			
+			
+			for (Trajet traj : mesStations[k].trajets)
+			{
+				if (heuredep+poidTrajets[k] < traj.hDep)
+				{
+					int i=0 ;
+					while(mesStations[i]!=traj.gareArr)i++;
+					
+					int ha = (int)(traj.hArr.charAt(0)+traj.hArr.charAt(1));
+					int ma = (int)(traj.hArr.charAt(3)+traj.hArr.charAt(4));
+					
+					if(poidsTrajet==-1 || poidsTrajets[i]> (ha-hd)*60 +ma-md)
+					{
+						poidTrajets[i]=(ha-hd)*60 +ma-md;
+						precedence[i]=plusproche;
+					}
+				 }
+			}
+			
+			//Recherche de la distance la plus proche
+			int k ;
+			for( i=1;i<mesStations.length();i++)
+			{
+				if (min==-1 || min>poidTrajets[i])
+				{
+					k=i;
+				}
+			}
+			Station plusproche= mesStations[k];
+			bool=(plusproche==arrive);
 	}
