@@ -80,7 +80,6 @@ public class ReadFile {
 						if(villedep!=null)
 						{
 							x=new Station(villedep,garedep);
-							System.out.println(mesStations.indexOf(x));
 							if(!mesStations.contains(x))
 							{
 								mesStations.add(x);
@@ -138,7 +137,7 @@ public class ReadFile {
 
 	public static void algoritmedikjstra(Station depart,Station arrive,String heuredep, char critere ,ArrayList<Station> mesStations)
 	{
-		int i,k;
+		int i,k,j;
 		int hd = (int)(heuredep.charAt(0)+heuredep.charAt(1));
 		int md = (int)(heuredep.charAt(3)+heuredep.charAt(4));
 		int n= mesStations.size();
@@ -146,58 +145,61 @@ public class ReadFile {
 		Station[] precedences=new Station[n];
 		boolean[] visite=new boolean[n];
 		for( i=0; i<n;i++)visite[i]=false;
-		for(int j : poidTrajets)j=-1;
-
+		for( j=0 ;j<poidTrajets.length;j++)poidTrajets[j]=-1;
 
 		//pointeur i vers la gare de depart
 		i=0 ;
 		while( mesStations.get(i)!=depart)i++;
 		poidTrajets[i]=0;
-		k=0 ;
-		while( mesStations.get(k)!=depart)k++;
-		poidTrajets[k]=0;
-
 
 		//Algo meilleur Temps d arrivee entre lheure demandee pour le depart et l heure d arrivee en gare
-		System.out.println("initialise");
+
 		//initialisation
+		System.out.println(depart.trajets.isEmpty());
 		for (Trajet traj : depart.trajets)
 		{
+			System.out.println("initialise");
 			System.out.println(traj.gareArr.gare+" "+traj.hArr+" "+traj.gareDep.gare+":"+traj.hDep);
 			int ha = (int)((traj.hArr.charAt(0))-48)*10+ (int)(traj.hArr.charAt(1))-48;
 			int ma = (int)((traj.hArr.charAt(3))-48)*10+ (int)(traj.hArr.charAt(4))-48;
 			if ( hd*60+md < ha*60+md)
 			{
 				//Recherche du pointeur vers la station
-				i=0 ;
-				while(mesStations.get(i)!= traj.gareArr)i++;
+				j=0 ;
+				while(mesStations.get(j)!= traj.gareArr)i++;
 				////////////
 
-				if(poidTrajets[i]==-1 || poidTrajets[i]> (ha-hd)*60 +ma-md)
+				if(poidTrajets[j]<0 || poidTrajets[i]> (ha-hd)*60 +ma-md)
 				{
-					poidTrajets[i]=(ha-hd)*60 +ma-md;
-					precedences[i]=depart;
+					System.out.println("initialisation remplisage poid");
+					poidTrajets[j]=(ha-hd)*60 +ma-md;
+					precedences[j]=depart;
 				}
 			}
 		}
-		//Recherche des trajet depuis la station voisine
-		int j=i;//memorisation de la gare de depart
-		for (Trajet traj : depart.jumelle.trajets)
+		if(depart.jumelle!=null)
 		{
-			int ha = (int)(traj.hArr.charAt(0)+traj.hArr.charAt(1));
-			int ma = (int)(traj.hArr.charAt(3)+traj.hArr.charAt(4));
-			if ( hd*60+md+depart.dureeNavette < ha*60+ma)
+			//Recherche des trajet depuis la station voisine
+			j=i;//memorisation de la gare de depart
+			for (Trajet traj : depart.jumelle.trajets)
 			{
-				//Recherche du pointeur vers la station
-				i=0 ;
-				while(mesStations.get(i)!= traj.gareArr)i++;
-				///////////////////////////////////////
-
-				if(poidTrajets[i]==-1 || poidTrajets[i]> (ha-hd)*60 +ma-md)
+				System.out.println("forjumelle");
+				int ha = (int)(traj.hArr.charAt(0)+traj.hArr.charAt(1));
+				int ma = (int)(traj.hArr.charAt(3)+traj.hArr.charAt(4));
+				if ( hd*60+md+depart.dureeNavette < ha*60+ma)
 				{
-					poidTrajets[i]=(ha-hd)*60 +ma-md;
-					precedences[i]=depart.jumelle;
-					precedences[j]=mesStations.get(k);//precedence de la gare voisine
+					//Recherche du pointeur vers la station
+					i=0 ;
+					while(mesStations.get(i)!= traj.gareArr)i++;
+					///////////////////////////////////////
+
+					if(poidTrajets[i]<0|| poidTrajets[i]> (ha-hd)*60 +ma-md)
+					{
+						System.out.println("initialisation remplissage");
+						poidTrajets[i]=(ha-hd)*60 +ma-md;
+						precedences[i]=depart.jumelle;
+						precedences[j]=mesStations.get(i);//precedence de la gare voisine
+					}
 				}
 			}
 		}
@@ -205,43 +207,47 @@ public class ReadFile {
 		//Algo
 
 		//Recherche de la distance la plus proche
+		k=0;
 		for( i=1;i<mesStations.size();i++)
 		{
 			int min=-1;
-			if (min>poidTrajets[i]&&poidTrajets[i]!=-1)
+			if(!visite[i])
 			{
-				k=i;
-				min=poidTrajets[i];
+				if (min>poidTrajets[i]&&poidTrajets[i]!=-1)
+				{
+					k=i;
+					min=poidTrajets[i];
+				}
 			}
 		}
 		Station plusproche= mesStations.get(k);
 		//////////////////////////////////////
 
 		boolean bool=(plusproche==arrive||plusproche.jumelle==arrive);
-		System.out.println("debut algo");
+		System.out.println(bool);
 
 		while(!bool)
-			System.out.print(bool);		{
+		{
+			System.out.println(plusproche.gare+"DEBUG1");
 			visite[k]=true;
 			hd = (int)(heuredep.charAt(0)+heuredep.charAt(1));
 			md = (int)(heuredep.charAt(3)+heuredep.charAt(4));
-
 			int min=poidTrajets[0];
-
-
 			for (Trajet traj : mesStations.get(k).trajets)
 			{
-				int ha = (int)(traj.hArr.charAt(0) - 48 *10+(int)traj.hArr.charAt(1))-48;
-				int ma = (int)(traj.hArr.charAt(3) - 48 *10+(int)traj.hArr.charAt(4))-48;
-
+				System.out.println("DEBUG2");
+				int ha = ((int)(traj.hArr.charAt(0) - 48) *10+(int)traj.hArr.charAt(1))-48;
+				int ma = ((int)(traj.hArr.charAt(3) - 48) *10+(int)traj.hArr.charAt(4))-48;
+				System.out.println(poidTrajets[k]);
 				if (hd*60+md+poidTrajets[k] < ha*60+ma)
 				{
+					System.out.println("DEBUG3");
 					i=0 ;
 					while(mesStations.get(i)!=traj.gareArr)i++;
-
 					if(poidTrajets[i]==-1 || poidTrajets[i]> (ha-hd)*60 +ma-md)
 					{
-						poidTrajets[i]=(ha-hd)*60 +ma-md;
+						System.out.println("DEBUG4");
+						poidTrajets[i]=(ha-hd)*60+ma-md;
 						precedences[i]=plusproche;
 					}
 				}
@@ -249,8 +255,8 @@ public class ReadFile {
 			// recherche pour la Station voisine
 			for (Trajet traj : depart.jumelle.trajets)
 			{
-				int ha = (int)((traj.hArr.charAt(0))-48 *10+ (int)traj.hArr.charAt(1)) -48;
-				int ma = (int)(traj.hArr.charAt(3) - 48 *10+ (int)traj.hArr.charAt(4)) -48;
+				int ha = ((int)((traj.hArr.charAt(0))-48) *10+ (int)traj.hArr.charAt(1)) -48;
+				int ma = ((int)(traj.hArr.charAt(3) - 48) *10+ (int)traj.hArr.charAt(4)) -48;
 				if ( hd*60+md+plusproche.dureeNavette < ha*60+ma)
 				{
 					//Recherche du pointeur vers la station
@@ -279,47 +285,16 @@ public class ReadFile {
 			plusproche= mesStations.get(k);
 			bool=(plusproche==arrive||plusproche.jumelle==arrive||i==n);
 		}
+		//manque condition darret si impossible
+		//affichage
 		Station st=mesStations.get(k);
 		System.out.println(st.gare);
-		while(st!=depart)
+		/*while(st!=depart)
 		{
+			System.out.println("jumelle:"+st.jumelle.gare);
 			System.out.println(st.ville+"-"+st.gare+">>> ");
 			k=mesStations.indexOf(st);
 			st=precedences[k];
-		}
-		
-		/*public static void algoritmedikjstra(String depart,String arrive,String heure)
-	{
-		int[][] etapes; 
-		String[] precedents;
-		Station tabs[]= new Station[5];
-		Station arrive;
-		int j=0;
-		while(depart!=tabs[j].ville)j++;
-		int i=0;
-		for (int k=0;k<.length;k++){
-			i=0;
-			while(depart.precedente.get(k)!=tabs[i])i++;
-			int poids[i]=Math.min(poids[j]+depart.precedente.get(k).duree(depart);
-
-		}
-		i=1;
-		int l;
-		while(i<poids.length){
-			int p = Integer.MAX_VALUE;
-			if(p>poids[i]){
-				p=poids[i];
-				l=i;
-				i++;
-			}
-			if(tabs[l]!=arrive){
-				ReadFile.algoritmedikjstra(tabs[l],poids[i]);
-			}
-			else{ System.out.println("poids minimal = "+ poids[i];} 
-
-		}
-
-	}*/
-
+		}*/
 	}
 }
